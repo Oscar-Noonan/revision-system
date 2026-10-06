@@ -15,8 +15,8 @@ class Question:
         self.response = response
         
     
-    def retirve_questions():
+    def retrieve_questions(self):
         pass
     
-    def mark_questions():
+    def mark_questions(self):
         pass
