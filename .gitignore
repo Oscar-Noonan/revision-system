@@ -1,5 +1,6 @@
 ### database ####
 app.db
+test_app.db
 
 ### pycache ###
 __pycache__/
