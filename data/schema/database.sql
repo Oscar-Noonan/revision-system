@@ -13,9 +13,12 @@ CREATE TABLE IF NOT EXISTS subjects (
 
 CREATE TABLE IF NOT EXISTS enrollments (
     enrollmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+    studentID INTEGER NOT NULL,
+    subjectID INTEGER NOT NULL,
 
     FOREIGN KEY (studentID)
         REFERENCES students(studentID),
+
     FOREIGN KEY (subjectID)
         REFERENCES subjects(subjectID)
 );
