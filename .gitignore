@@ -1,2 +1,5 @@
 ### database ####
 app.db
+
+### pycache ###
+__pycache__/
