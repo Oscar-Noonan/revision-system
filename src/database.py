@@ -27,12 +27,12 @@ class Database:
     def retrieve_hash(self):
         pass
 
-    def search_subjects(self, studentID: int, subject_name: str) -> list[dict]:
-        query = "SELECT * FROM subjects WHERE studentID = ? AND subjectName = ?"
+    def search_subjects(self, studentID: int | None) -> list[dict]:
+        query = "SELECT * FROM subjects WHERE studentID = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (studentID, subject_name))
+            cursor.execute(query, (studentID,))
             rows = cursor.fetchall()
                     
             return [dict(row) for row in rows]
