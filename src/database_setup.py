@@ -1,13 +1,11 @@
 import sqlite3
 
 def create_database(database: str = "data/app.db"):
-    connection = sqlite3.connect(database)
+    with sqlite3.connect(database) as connection:
+        with open("data/schema/database.sql") as file:
+            schema = file.read()
 
-    with open("data/schema/database.sql") as file:
-        schema = file.read()
-
-    connection.executescript(schema)
-    connection.close()
+        connection.executescript(schema)
 
 
 create_database()
