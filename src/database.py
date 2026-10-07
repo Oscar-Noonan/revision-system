@@ -1,8 +1,5 @@
 import sqlite3
 
-from student import Student
-from subject import Subject
-
 
 class Database:
     def __init__(self, db_name="app.db"):
@@ -13,7 +10,7 @@ class Database:
         conn.row_factory = sqlite3.Row
         return conn
 
-    def search_username(self, username: str) -> bool:
+    def search_username(self, username: str | None) -> bool:
         query = "SELECT 1 FROM students WHERE studentName = ?"
         
         with self.get_connection() as conn:
