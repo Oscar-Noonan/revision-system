@@ -13,15 +13,13 @@ class Database:
         conn.row_factory = sqlite3.Row
         return conn
 
-    def search_username(self, student: Student) -> bool:
-        query = "SELECT * FROM students WHERE studentName = ?"
+    def search_username(self, username: str) -> bool:
+        query = "SELECT 1 FROM students WHERE studentName = ?"
         
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (student.username,))
-            rows = cursor.fetchall()
-                            
-            return True if rows else False
+            cursor.execute(query, (username,))
+            return cursor.fetchone() is not None
 
     def save_credentials(self):
         pass
@@ -29,12 +27,12 @@ class Database:
     def retrieve_hash(self):
         pass
 
-    def search_subjects(self, student: Student, subject: Subject) -> list[dict]:
+    def search_subjects(self, studentID: int, subject_name: str) -> list[dict]:
         query = "SELECT * FROM subjects WHERE studentID = ? AND subjectName = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (student.studentID, subject.name))
+            cursor.execute(query, (studentID, subject_name))
             rows = cursor.fetchall()
                     
             return [dict(row) for row in rows]
