@@ -1,5 +1,7 @@
 class Subject:
     def __init__(self,
-                 name,
+                 subject_name: str | None,
+                 subjectID: int | None
     ):
-        self.name = name
+        self.subject_name = subject_name
+        self.subjectID = subjectID
