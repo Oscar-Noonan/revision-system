@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS students (
     studentID INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    dbHash TEXT NOT NULL,
     time_available INTEGER NOT NULL
 );
 
