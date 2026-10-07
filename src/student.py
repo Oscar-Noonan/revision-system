@@ -3,16 +3,16 @@ from subject import Subject
 
 class Student:
     def __init__(self,
+                 username: str | None,
+                 password: str | None,
                  studentID: int | None,
-                 username: str,
-                 password: str,
                  db_hash: str | None,
                  subjects: list[Subject] | None,
                  time_available: int | None #int is the number of minutes
     ):
-        self.studentID = studentID
         self.username = username
         self.password = password
+        self.studentID = studentID
         self.db_hash = db_hash
         self.subjects = subjects
         self.time_available = time_available
