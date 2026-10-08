@@ -35,18 +35,18 @@ class TestDatabase(unittest.TestCase):
         os.remove("test.db")
 
 
-    def test_search_subjects_single(self):
+    def test_search_enrollment_single(self):
         db = Database("test.db")
 
         with db.get_connection() as conn:
             conn.execute("""
-                CREATE TABLE subjects (
+                CREATE TABLE IF NOT EXISTS enrollments (
                     studentID INTEGER,
                     subjectName TEXT
                 )
             """)
             conn.execute(
-                "INSERT INTO subjects VALUES (?, ?)",
+                "INSERT INTO enrollments VALUES (?, ?)",
                 (1, "Computer Science")
             )
 
@@ -60,18 +60,18 @@ class TestDatabase(unittest.TestCase):
         os.remove("test.db")
 
 
-    def test_search_subjects_multiple(self):
+    def test_search_enrollment_multiple(self):
         db = Database("test.db")
 
         with db.get_connection() as conn:
             conn.execute("""
-                CREATE TABLE subjects (
+                CREATE TABLE IF NOT EXISTS enrollments (
                     studentID INTEGER,
                     subjectName TEXT
                 )
             """)
             conn.executemany(
-                "INSERT INTO subjects VALUES (?, ?)",
+                "INSERT INTO enrollments VALUES (?, ?)",
                 [
                     (1, "Computer Science"),
                     (2, "Computer Science"),
