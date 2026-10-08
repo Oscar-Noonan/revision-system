@@ -25,7 +25,7 @@ class Database:
         pass
 
     def search_subjects(self, studentID: int | None) -> list[dict]:
-        query = "SELECT * FROM subjects WHERE studentID = ?"
+        query = "SELECT * FROM enrollments WHERE studentID = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
