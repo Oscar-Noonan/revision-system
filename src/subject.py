@@ -4,4 +4,4 @@ class Subject:
                  subjectID: int | None
     ):
         self.subject_name = subject_name
-        self.subjectID = subjectID
+        self.subject_id = subjectID

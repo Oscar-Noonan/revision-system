@@ -1,13 +1,13 @@
 class Question:
     def __init__(self,
-                 questionID: int,
+                 question_id: int,
                  question_text: str,
                  total_marks: int,
                  mark_scheme: int,
                  user_answer: str | None,
                  response: dict | None
     ):
-        self.questionID = questionID
+        self.question_id = question_id
         self.question_text = question_text
         self.total_marks = total_marks
         self.mark_scheme = mark_scheme

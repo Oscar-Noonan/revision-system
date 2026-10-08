@@ -11,7 +11,7 @@ class Database:
         return conn
 
     def search_username(self, username: str | None) -> bool:
-        query = "SELECT 1 FROM students WHERE studentName = ?"
+        query = "SELECT 1 FROM students WHERE username = ?"
         
         with self.get_connection() as conn:
             cursor = conn.cursor()
@@ -24,12 +24,12 @@ class Database:
     def retrieve_hash(self):
         pass
 
-    def search_subjects(self, studentID: int | None) -> list[dict]:
-        query = "SELECT * FROM enrolments WHERE studentID = ?"
+    def search_subjects(self, student_id: int | None) -> list[dict]:
+        query = "SELECT * FROM enrolments WHERE student_id = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (studentID,))
+            cursor.execute(query, (student_id,))
             rows = cursor.fetchall()
                     
             return [dict(row) for row in rows]

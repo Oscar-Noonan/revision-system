@@ -20,7 +20,7 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE students (
-                    studentName TEXT
+                    username TEXT
                 )
             """)
 
@@ -41,8 +41,8 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS enrolments (
-                    studentID INTEGER,
-                    subjectName TEXT
+                    student_id INTEGER,
+                    subject_name TEXT
                 )
             """)
             conn.execute(
@@ -53,8 +53,8 @@ class TestDatabase(unittest.TestCase):
         student = Student("Oscar", None, 1, None, None, None)
 
         self.assertEqual(
-            db.search_subjects(student.studentID),
-            [{"studentID": 1, "subjectName": "Computer Science"}]
+            db.search_subjects(student.student_id),
+            [{"student_id": 1, "subject_name": "Computer Science"}]
         )
 
         os.remove("test.db")
@@ -66,8 +66,8 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS enrolments (
-                    studentID INTEGER,
-                    subjectName TEXT
+                    student_id INTEGER,
+                    subject_name TEXT
                 )
             """)
             conn.executemany(
@@ -82,10 +82,10 @@ class TestDatabase(unittest.TestCase):
         student = Student("Oscar", None, 1, None, None, None)
 
         self.assertEqual(
-            db.search_subjects(student.studentID),
+            db.search_subjects(student.student_id),
             [
-                {"studentID": 1, "subjectName": "Computer Science"},
-                {"studentID": 1, "subjectName": "Geography"}
+                {"student_id": 1, "subject_name": "Computer Science"},
+                {"student_id": 1, "subject_name": "Geography"}
             ]
         )
 
