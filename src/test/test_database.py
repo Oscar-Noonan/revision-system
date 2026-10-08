@@ -40,13 +40,13 @@ class TestDatabase(unittest.TestCase):
 
         with db.get_connection() as conn:
             conn.execute("""
-                CREATE TABLE IF NOT EXISTS enrollments (
+                CREATE TABLE IF NOT EXISTS enrolments (
                     studentID INTEGER,
                     subjectName TEXT
                 )
             """)
             conn.execute(
-                "INSERT INTO enrollments VALUES (?, ?)",
+                "INSERT INTO enrolments VALUES (?, ?)",
                 (1, "Computer Science")
             )
 
@@ -65,13 +65,13 @@ class TestDatabase(unittest.TestCase):
 
         with db.get_connection() as conn:
             conn.execute("""
-                CREATE TABLE IF NOT EXISTS enrollments (
+                CREATE TABLE IF NOT EXISTS enrolments (
                     studentID INTEGER,
                     subjectName TEXT
                 )
             """)
             conn.executemany(
-                "INSERT INTO enrollments VALUES (?, ?)",
+                "INSERT INTO enrolments VALUES (?, ?)",
                 [
                     (1, "Computer Science"),
                     (2, "Computer Science"),
