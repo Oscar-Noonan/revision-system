@@ -21,3 +21,14 @@ CREATE TABLE IF NOT EXISTS enrollments (
     FOREIGN KEY (subjectID)
         REFERENCES subjects(subjectID)
 );
+
+CREATE TABLE IF NOT EXISTS questions (
+    questionID INTEGER PRIMARY KEY AUTOINCREMENT,
+    subjectID INTEGER NOT NULL
+    question TEXT NOT NULL
+    markScheme TEXT NOT NULL
+    marks INTEGER NOT NULL
+
+    FOREIGN KEY (subjectID)
+        REFERENCES subjects(subjectID)
+)
