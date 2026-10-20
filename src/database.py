@@ -21,8 +21,14 @@ class Database:
     def save_credentials(self):
         pass
 
-    def retrieve_hash(self):
-        pass
+    def retrieve_hash(self, student_id: int | None) -> str:
+        query = "SELECT password FROM students WHERE student_id = ?"
+        
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (student_id,))
+            row = cursor.fetchone()
+            return row[0] if row else ""
 
     def search_subjects(self, student_id: int | None) -> list[dict]:
         query = "SELECT * FROM enrolments WHERE student_id = ?"
