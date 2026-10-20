@@ -79,10 +79,8 @@ class TestDatabase(unittest.TestCase):
                 ]
             )
 
-        student = Student("Oscar", None, 1, None, None, None)
-
         self.assertEqual(
-            db.search_subjects(student.student_id),
+            db.search_subjects(1),
             [
                 {"student_id": 1, "subject_name": "Computer Science"},
                 {"student_id": 1, "subject_name": "Geography"}
@@ -90,6 +88,40 @@ class TestDatabase(unittest.TestCase):
         )
 
         os.remove("test.db")
+
+
+    def test_delete_subjects(self):
+        db = Database("test.db")
+
+        with db.get_connection() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS enrolments (
+                    student_id INTEGER,
+                    subject_name TEXT
+                )
+            """)
+            conn.executemany(
+                "INSERT INTO enrolments VALUES (?, ?)",
+                [
+                    (1, "Computer Science"),
+                    (2, "Computer Science"),
+                    (1, "Geography")
+                ]
+            )
+
+        db.delete_subjects(1)
+
+        self.assertEqual(
+            db.search_subjects(1),
+            []
+        )
+
+        self.assertEqual(
+            db.search_subjects(2),
+            [
+                {"student_id": 2, "subject_name": "Computer Science"}
+            ]
+        )
 
 if __name__ == "__main__":
     unittest.main()
