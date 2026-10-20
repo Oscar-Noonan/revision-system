@@ -34,8 +34,12 @@ class Database:
                     
             return [dict(row) for row in rows]
 
-    def delete_subjects(self):
-        pass
+    def delete_subjects(self, student_id: int | None):
+        query = "DELETE FROM enrolments WHERE student_id = ?"
+
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (student_id,))
 
     def save_subjects(self):
         pass
