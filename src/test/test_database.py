@@ -1,6 +1,7 @@
 import unittest
 import os
 import sqlite3
+import hashlib
 
 from database import Database
 from student import Student
@@ -31,6 +32,36 @@ class TestDatabase(unittest.TestCase):
 
         student = Student("Oscar", None, 1, None, None, None)
         self.assertTrue(db.search_username(student.username))
+
+        os.remove("test.db")
+
+
+    def test_retrieve_hash(self):
+        db = Database("test.db")
+        
+        with db.get_connection() as conn:
+            conn.execute("""
+                CREATE TABLE students (
+                    student_id INTEGER,
+                    password TEXT
+                )
+            """)
+
+            first_student_id = 1
+            first_password = hashlib.sha256("password123".encode()).hexdigest()
+            second_student_id = 2
+            second_password = hashlib.sha256("SecurePassword123".encode()).hexdigest()
+
+            conn.executemany(
+                "INSERT INTO students VALUES (?, ?)",
+                [
+                    (first_student_id, first_password),
+                    (second_student_id, second_password)
+                ]
+            )
+
+        self.assertEqual(db.retrieve_hash(first_student_id), first_password)
+        self.assertEqual(db.retrieve_hash(second_student_id), second_password)
 
         os.remove("test.db")
 
@@ -122,6 +153,8 @@ class TestDatabase(unittest.TestCase):
                 {"student_id": 2, "subject_name": "Computer Science"}
             ]
         )
+
+        os.remove("test.db")
 
 if __name__ == "__main__":
     unittest.main()
