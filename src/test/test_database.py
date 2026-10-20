@@ -41,7 +41,7 @@ class TestDatabase(unittest.TestCase):
         
         with db.get_connection() as conn:
             conn.execute("""
-                CREATE TABLE students (
+                CREATE TABLE IF NOT EXISTS students (
                     student_id INTEGER,
                     password TEXT
                 )
@@ -62,6 +62,104 @@ class TestDatabase(unittest.TestCase):
 
         self.assertEqual(db.retrieve_hash(first_student_id), first_password)
         self.assertEqual(db.retrieve_hash(second_student_id), second_password)
+
+        os.remove("test.db")
+
+
+    def test_save_credentials(self):
+        db = Database("test.db")
+                
+        with db.get_connection() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS students (
+                    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    password TEXT NOT NULL,
+                    time_available INTEGER NOT NULL
+                )
+            """)
+
+        username = "student1"
+        password = "password123"
+        time_available = 90
+
+        db.save_credentials(username, password, time_available)
+
+        with db.get_connection() as conn:
+            cursor = conn.execute("SELECT username, password, time_available FROM students WHERE username = ?",  (username,))
+            result = cursor.fetchone()
+
+        self.assertEqual(result[0], username)
+        self.assertEqual(result[1], password)
+        self.assertEqual(result[2], time_available)
+
+        os.remove("test.db")
+
+
+    def test_update_password(self):
+        db = Database("test.db")
+                        
+        with db.get_connection() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS students (
+                    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    password TEXT NOT NULL,
+                    time_available INTEGER NOT NULL
+                )
+            """)
+
+        username = "student1"
+        password = "password123"
+        time_available = 90
+
+        db.save_credentials(username, password, time_available)
+
+        password = "newpassword123"
+        
+        db.update_password(username, password)
+
+        with db.get_connection() as conn:
+            cursor = conn.execute("SELECT username, password, time_available FROM students WHERE username = ?",  (username,))
+            result = cursor.fetchone()
+
+        self.assertEqual(result[0], username)
+        self.assertEqual(result[1], password)
+        self.assertEqual(result[2], time_available)
+
+        os.remove("test.db")
+
+
+    def test_update_time_available(self):
+        db = Database("test.db")
+                        
+        with db.get_connection() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS students (
+                    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    password TEXT NOT NULL,
+                    time_available INTEGER NOT NULL
+                )
+            """)
+
+        username = "student1"
+        password = "password123"
+        time_available = 90
+
+        db.save_credentials(username, password, time_available)
+
+        time_available = 120
+
+        db.update_time_available(username, time_available)
+
+        with db.get_connection() as conn:
+            cursor = conn.execute("SELECT username, password, time_available FROM students WHERE username = ?",  (username,))
+            result = cursor.fetchone()
+
+        self.assertEqual(result[0], username)
+        self.assertEqual(result[1], password)
+        self.assertEqual(result[2], time_available)
 
         os.remove("test.db")
 
