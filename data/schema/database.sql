@@ -1,13 +1,19 @@
 CREATE TABLE IF NOT EXISTS students (
-    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
+    username TEXT PRIMARY KEY NOT NULL UNIQUE,
     password TEXT NOT NULL,
     time_available INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS subjects (
-    subject_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    subject_name TEXT NOT NULL
+    subject_name TEXT PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS topic (
+    topics_name TEXT PRIMARY KEY NOT NULL,
+    subject_name TEXT NOT NULL,
+
+    FOREIGN KEY (subject_name)
+        REFERENCES subjects(subject_name)
 );
 
 CREATE TABLE IF NOT EXISTS enrolments (
