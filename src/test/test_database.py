@@ -30,7 +30,7 @@ class TestDatabase(unittest.TestCase):
                 ("Oscar",)
             )
 
-        student = Student("Oscar", None, 1, None, None, None)
+        student = Student("Oscar", None, None, None, None)
         self.assertTrue(db.search_username(student.username))
 
         os.remove("test.db")
@@ -42,26 +42,26 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS students (
-                    student_id INTEGER,
-                    password TEXT
+                    username TEXT,
+                    "password" TEXT
                 )
             """)
 
-            first_student_id = 1
+            first_username = "Oscar"
             first_password = hashlib.sha256("password123".encode()).hexdigest()
-            second_student_id = 2
+            second_username = "Other"
             second_password = hashlib.sha256("SecurePassword123".encode()).hexdigest()
 
             conn.executemany(
                 "INSERT INTO students VALUES (?, ?)",
                 [
-                    (first_student_id, first_password),
-                    (second_student_id, second_password)
+                    (first_username, first_password),
+                    (second_username, second_password)
                 ]
             )
 
-        self.assertEqual(db.retrieve_hash(first_student_id), first_password)
-        self.assertEqual(db.retrieve_hash(second_student_id), second_password)
+        self.assertEqual(db.retrieve_hash(first_username), first_password)
+        self.assertEqual(db.retrieve_hash(second_username), second_password)
 
         os.remove("test.db")
 
@@ -72,7 +72,6 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS students (
-                    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL,
                     time_available INTEGER NOT NULL
@@ -136,7 +135,6 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS students (
-                    student_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL,
                     time_available INTEGER NOT NULL
@@ -170,20 +168,20 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS enrolments (
-                    student_id INTEGER,
+                    username TEXT,
                     subject_name TEXT
                 )
             """)
             conn.execute(
                 "INSERT INTO enrolments VALUES (?, ?)",
-                (1, "Computer Science")
+                ("Oscar", "Computer Science")
             )
 
-        student = Student("Oscar", None, 1, None, None, None)
+        student = Student("Oscar", None, None, None, None)
 
         self.assertEqual(
-            db.search_subjects(student.student_id),
-            [{"student_id": 1, "subject_name": "Computer Science"}]
+            db.search_subjects(student.username),
+            ["Computer Science"]
         )
 
         os.remove("test.db")
@@ -195,24 +193,24 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS enrolments (
-                    student_id INTEGER,
+                    username TEXT,
                     subject_name TEXT
                 )
             """)
             conn.executemany(
                 "INSERT INTO enrolments VALUES (?, ?)",
                 [
-                    (1, "Computer Science"),
-                    (2, "Computer Science"),
-                    (1, "Geography")
+                    ("Oscar", "Computer Science"),
+                    ("Other", "Computer Science"),
+                    ("Oscar", "Geography")
                 ]
             )
 
         self.assertEqual(
-            db.search_subjects(1),
+            db.search_subjects("Oscar"),
             [
-                {"student_id": 1, "subject_name": "Computer Science"},
-                {"student_id": 1, "subject_name": "Geography"}
+                "Computer Science",
+                "Geography"
             ]
         )
 
@@ -225,30 +223,30 @@ class TestDatabase(unittest.TestCase):
         with db.get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS enrolments (
-                    student_id INTEGER,
+                    username TEXT,
                     subject_name TEXT
                 )
             """)
             conn.executemany(
                 "INSERT INTO enrolments VALUES (?, ?)",
                 [
-                    (1, "Computer Science"),
-                    (2, "Computer Science"),
-                    (1, "Geography")
+                    ("Oscar", "Computer Science"),
+                    ("Other", "Computer Science"),
+                    ("Oscar", "Geography")
                 ]
             )
 
-        db.delete_subjects(1)
+        db.delete_subjects("Oscar")
 
         self.assertEqual(
-            db.search_subjects(1),
+            db.search_subjects("Oscar"),
             []
         )
 
         self.assertEqual(
-            db.search_subjects(2),
+            db.search_subjects("Other"),
             [
-                {"student_id": 2, "subject_name": "Computer Science"}
+                "Computer Science"
             ]
         )
 
