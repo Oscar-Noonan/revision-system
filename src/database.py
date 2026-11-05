@@ -44,31 +44,31 @@ class Database:
             cursor.execute(query, (time_available, username))
             return 0
 
-    def retrieve_hash(self, student_id: int | None) -> str:
-        query = "SELECT password FROM students WHERE student_id = ?"
+    def retrieve_hash(self, username: str | None) -> str:
+        query = "SELECT password FROM students WHERE username = ?"
         
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (student_id,))
+            cursor.execute(query, (username,))
             row = cursor.fetchone()
             return row[0] if row else ""
 
-    def search_subjects(self, student_id: int | None) -> list[dict]:
-        query = "SELECT * FROM enrolments WHERE student_id = ?"
+    def search_subjects(self, username: str | None) -> list[str]:
+        query = "SELECT subject_name FROM enrolments WHERE username = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (student_id,))
+            cursor.execute(query, (username,))
             rows = cursor.fetchall()
                     
-            return [dict(row) for row in rows]
+            return [row[0] for row in rows]
 
-    def delete_subjects(self, student_id: int | None) -> int:
-        query = "DELETE FROM enrolments WHERE student_id = ?"
+    def delete_subjects(self, username: str | None) -> int:
+        query = "DELETE FROM enrolments WHERE username = ?"
 
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (student_id,))
+            cursor.execute(query, (username,))
             return 0
 
     def save_subjects(self):
