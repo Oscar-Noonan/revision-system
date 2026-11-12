@@ -20,6 +20,12 @@ const pool = new Pool({
     port: 5432
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(
+        path.join(__dirname, '../public/index.html')
+    );
+});
+
 app.get('/api/users', async (req, res) => {
     try {
         const result = await pool.query(
@@ -35,12 +41,6 @@ app.get('/api/users', async (req, res) => {
             error: "Failed to retrieve users"
         });
     }
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(
-        path.join(__dirname, '../public/index.html')
-    );
 });
 
 app.use((req, res) => {
