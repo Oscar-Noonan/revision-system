@@ -1,17 +1,22 @@
 require('dotenv').config();
 
+const cookieParser = require('cookie-parser');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
 
 const app = express();
+const authRoutes = require('./routes/auth');
 
 const hostname = process.env.HOSTNAME;
 const port = process.env.PORT;
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static('public'));
+
+app.use('/api/auth', authRoutes);
 
 const pool = new Pool({
     user: "revision_system",
