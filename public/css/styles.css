@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+    background: #f4f4f4;
+}
+
+.user {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: grey;
+}
+
+input, button {
+    padding: 10px;
+}

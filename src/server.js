@@ -11,6 +11,7 @@ const hostname = process.env.HOSTNAME;
 const port = process.env.PORT;
 
 app.use(express.json());
+app.use(express.static('public'));
 
 const pool = new Pool({
     user: "revision_system",
